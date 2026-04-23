@@ -112,7 +112,7 @@ Content-Type: application/json
 
 ## Local Development
 
-From [browser-sdk](https://github.com/oluwadamoo/segment-to-context/browser-sdk):
+From [browser-sdk](https://github.com/oluwadamoo/segment-to-context/tree/main/browser-sdk):
 
 ```bash
 npm install

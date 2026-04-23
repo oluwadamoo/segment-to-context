@@ -19,7 +19,7 @@ It runs as two processes:
 
 ## Local Setup
 
-From [api](https://github.com/oluwadamoo/segment-to-context/api):
+From [api](https://github.com/oluwadamoo/segment-to-context/tree/main/api):
 
 ```bash
 npm install

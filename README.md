@@ -30,15 +30,15 @@ segment-to-context/
 
 ## Project Guides
 
-- [API Guide](https://github.com/oluwadamoo/segment-to-context/api/README.md)
-- [Web Guide](https://github.com/oluwadamoo/segment-to-context/web/README.md)
-- [Browser SDK Guide](https://github.com/oluwadamoo/segment-to-context/browser-sdk/README.md)
+- [API Guide](https://github.com/oluwadamoo/segment-to-context/tree/main/api/README.md)
+- [Web Guide](https://github.com/oluwadamoo/segment-to-context/tree/main/web/README.md)
+- [Browser SDK Guide](https://github.com/oluwadamoo/segment-to-context/tree/main/browser-sdk/README.md)
 
 ## Local Development
 
 ### API
 
-From [api](https://github.com/oluwadamoo/segment-to-context/api):
+From [api](https://github.com/oluwadamoo/segment-to-context/tree/main/api):
 
 ```bash
 npm install
@@ -53,7 +53,7 @@ This starts:
 
 ### Web
 
-From [web](https://github.com/oluwadamoo/segment-to-context/web):
+From [web](https://github.com/oluwadamoo/segment-to-context/tree/main/web):
 
 ```bash
 npm install
@@ -64,7 +64,7 @@ The dashboard runs on `http://localhost:3000`.
 
 ### Browser SDK
 
-From [browser-sdk](https://github.com/oluwadamoo/segment-to-context/browser-sdk):
+From [browser-sdk](https://github.com/oluwadamoo/segment-to-context/tree/main/browser-sdk):
 
 ```bash
 npm install

@@ -19,7 +19,7 @@ It is a Next.js app built with:
 
 ## Local Setup
 
-From [web](https://github.com/oluwadamoo/segment-to-context/web):
+From [web](https://github.com/oluwadamoo/segment-to-context/tree/main/web):
 
 ```bash
 npm install
@@ -58,10 +58,10 @@ API_BASE_URL=http://localhost:5300
 
 Important files:
 
-- [app/page.tsx](https://github.com/oluwadamoo/segment-to-context/web/app/page.tsx)
-- [components/home/dashboard.tsx](https://github.com/oluwadamoo/segment-to-context/web/components/home/dashboard.tsx)
-- [providers/auth-provider.tsx](https://github.com/oluwadamoo/segment-to-context/web/providers/auth-provider.tsx)
-- [app/api/stream/events/route.ts](https://github.com/oluwadamoo/segment-to-context/web/app/api/stream/events/route.ts)
+- [app/page.tsx](https://github.com/oluwadamoo/segment-to-context/tree/main/web/app/page.tsx)
+- [components/home/dashboard.tsx](https://github.com/oluwadamoo/segment-to-context/tree/main/web/components/home/dashboard.tsx)
+- [providers/auth-provider.tsx](https://github.com/oluwadamoo/segment-to-context/tree/main/web/providers/auth-provider.tsx)
+- [app/api/stream/events/route.ts](https://github.com/oluwadamoo/segment-to-context/tree/main/web/app/api/stream/events/route.ts)
 
 ## Auth Flow
 
