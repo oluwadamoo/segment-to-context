@@ -21,5 +21,5 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY package.json package-lock.json ./
 
-EXPOSE 8080
+EXPOSE 5300
 CMD ["node", "dist/api.js"]

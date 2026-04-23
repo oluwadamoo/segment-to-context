@@ -1,0 +1,71 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '$_AR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
+      - '.'
+    dir: 'api' 
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '$_AR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - 'gcloud'
+      - 'run'
+      - 'deploy'
+      - '$_SERVICE_NAME'
+      - '--image'
+      - '$_AR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
+      - '--region'
+      - '$_REGION'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated' 
+      - '--port'
+      - '5300'
+      - '--set-secrets'
+      - 'DB_PASSWORD=DB_PASSWORD:latest,JWT_SECRET=JWT_SECRET:latest'
+      - '--set-env-vars'
+      - 'APP_PORT=5300'
+      - 'DB_HOST=${_DB_HOST}' 
+      - 'DB_PORT=${_DB_PORT}'
+      - 'DB_USER=${_DB_USER}'
+      - 'DB_NAME=${_DB_NAME}'
+      - 'GCP_PROJECT_ID=$PROJECT_ID'
+      - 'GCP_LOCATION=${_REGION}'
+      - 'RAW_EVENTS_TOPIC=${_RAW_EVENTS_TOPIC}'
+      - 'PERSONA_REFRESH_TOPIC=${_PERSONA_REFRESH_TOPIC}'
+      - 'PUBSUB_PUSH_AUTH_ENABLED=${_PUBSUB_PUSH_AUTH_ENABLED}'
+      - 'PUBSUB_PUSH_AUDIENCE=${_PUBSUB_PUSH_AUDIENCE}'
+      - 'PUBSUB_PUSH_SERVICE_ACCOUNT_EMAIL=${_PUBSUB_PUSH_SERVICE_ACCOUNT_EMAIL}'
+      - 'JWT_EXPIRES_IN=${_JWT_EXPIRES_IN}'
+      - 'TENANT_EVENTS_CHANNEL=${_TENANT_EVENTS_CHANNEL}'
+      - 'USER_PERSONAS_CHANNEL=${_USER_PERSONAS_CHANNEL}'
+    id: Deploy to Cloud Run
+
+images:
+  - '$_AR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
+
+substitutions:
+  _SERVICE_NAME: 'segment-to-context-api' 
+  _REGION: 'us-central1' 
+  _AR_HOSTNAME: 'us-central1-docker.pkg.dev' 
+  _DB_HOST: 'your-cloudsql-instance-ip-or-connection-name' 
+  _DB_PORT: '5432' 
+  _DB_USER: 'postgres'
+  _DB_NAME: 'segment_to_context'
+  _RAW_EVENTS_TOPIC: 'raw-events-topic'
+  _PERSONA_REFRESH_TOPIC: 'persona-refresh'
+  _PUBSUB_PUSH_AUTH_ENABLED: 'true'
+  _PUBSUB_PUSH_AUDIENCE: 'https://your-processor-cloud-run-url' 
+  _PUBSUB_PUSH_SERVICE_ACCOUNT_EMAIL: 'admin-386@project-879224b7-6097-4fb1-9a6.iam.gserviceaccount.com'
+  _JWT_EXPIRES_IN: '24h'
+  _TENANT_EVENTS_CHANNEL: 'tenant_events_stream'
+  _USER_PERSONAS_CHANNEL: 'user_personas_stream'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
