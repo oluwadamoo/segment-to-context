@@ -1,0 +1,39 @@
+{
+  "name": "@mrdamilola/segment-to-context-browser-sdk",
+  "version": "1.0.2",
+  "description": "Lightweight browser SDK for tracking events and sending context",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "author": "Damilola Saliu",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oluwadamoo/segment-to-context"
+  },
+  "keywords": [
+    "analytics",
+    "tracking",
+    "browser-sdk",
+    "segment-to-context",
+    "events"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run build"
+  }
+}
