@@ -40,8 +40,6 @@ await stc.track("purchase", {
 Depending on configuration, the SDK can send:
 
 - `page_view`
-- `session_started`
-- `session_ended`
 - `button_click`
 - `link_click`
 

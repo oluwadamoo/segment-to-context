@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type EventStreamItem = {
   id: string;
   userId: string;
@@ -8,9 +9,10 @@ export type EventStreamItem = {
   brand: string;
   price: number;
   timestamp: string;
-  payload: Record<string, unknown>;
+  payload: Record<string, any>;
   animationMode?: "live" | "buffered";
   animationIndex?: number;
+
 };
 
 export type EventIngestedMessage = {
@@ -60,77 +62,7 @@ export type UserPersona = {
   primaryChannel: string;
 };
 
-const eventBlueprints = [
-  {
-    eventType: "view",
-    product: "Apple Wristwatch",
-    category: "electronics.wearables",
-    channel: "web",
-    brand: "Apple",
-    price: 162.01,
-  },
-  {
-    eventType: "add_to_cart",
-    product: "Samsung Galaxy Buds",
-    category: "electronics.audio",
-    channel: "mobile",
-    brand: "Samsung",
-    price: 109.5,
-  },
-  {
-    eventType: "checkout_started",
-    product: "Sony WH-1000XM5",
-    category: "electronics.audio",
-    channel: "web",
-    brand: "Sony",
-    price: 329.99,
-  },
-  {
-    eventType: "view",
-    product: "Nike Zoom Pegasus",
-    category: "fashion.sneakers",
-    channel: "web",
-    brand: "Nike",
-    price: 145.0,
-  },
-  {
-    eventType: "purchase",
-    product: "Kindle Paperwhite",
-    category: "electronics.readers",
-    channel: "mobile",
-    brand: "Amazon",
-    price: 189.99,
-  },
-];
 
-export function createSeedEvents(): EventStreamItem[] {
-  return Array.from({ length: 10 }, (_, index) =>
-    createMockEvent(index * 17, Date.now() - index * 70_000)
-  );
-}
-
-export function createMockEvent(seed = 0, timestamp = Date.now()): EventStreamItem {
-  const blueprint = eventBlueprints[seed % eventBlueprints.length];
-
-  return {
-    id: `evt_${timestamp}_${seed}`,
-    userId: `${(seed % 6) + 1}`,
-    eventType: blueprint.eventType,
-    product: blueprint.product,
-    category: blueprint.category,
-    channel: blueprint.channel,
-    brand: blueprint.brand,
-    price: Number((blueprint.price + (seed % 4) * 3.25).toFixed(2)),
-    timestamp: new Date(timestamp).toISOString(),
-    payload: {
-      product: blueprint.product,
-      category: blueprint.category,
-      channel: blueprint.channel,
-      brand: blueprint.brand,
-      price: Number((blueprint.price + (seed % 4) * 3.25).toFixed(2)),
-    },
-  };
-}
 
 export function derivePersona(events: EventStreamItem[]) {
   const recentEvents = events.slice(0, 8);
@@ -260,14 +192,24 @@ export function mapStoredEventToEventStreamItem(
   };
 }
 
-function mapPayloadFields(payload: Record<string, unknown>) {
-  return {
-    product: readString(payload.product, "Unknown product"),
-    category: readString(payload.category, "uncategorized"),
-    channel: readString(payload.channel, readString(payload.browser, "unknown")),
-    brand: readString(payload.brand, "Unknown brand"),
+function mapPayloadFields(payload: Record<string, any>) {
+  if (!payload.product)
+    console.log(payload, "PAYLOAD")
+  const obj: {
+    product: string;
+    category: string;
+    channel: string;
+    brand: string;
+    price: number;
+  } = {
+    product: readString(payload.product, payload?.element?.text ?? ""),
+    category: readString(payload.category, ""),
+    channel: readString(payload.channel, "web"),
+    brand: readString(payload.brand, ""),
     price: readNumber(payload.price, 0),
   };
+
+  return obj;
 }
 
 function readString(value: unknown, fallback: string) {

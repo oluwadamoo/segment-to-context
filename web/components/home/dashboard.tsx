@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/providers/auth-provider";
@@ -25,6 +26,11 @@ const AuthenticatedDashboard = dynamic(
 
 export function Dashboard() {
   const { latestIssuedApiKey, logout, session, status } = useAuth();
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  if (status === "loading") {
+    return <DashboardShell />;
+  }
 
   if (status === "authenticated" && session?.accessToken) {
     return (
@@ -87,14 +93,18 @@ export function Dashboard() {
                 />
               </div>
               <div className="flex justify-center pt-2">
-                <Button size="lg">Open authentication</Button>
+                <Button size="lg" onClick={() => setIsAuthModalOpen(true)}>
+                  Open authentication
+                </Button>
               </div>
             </div>
           </div>
         </main>
       </div>
 
-      <AuthModal />
+      {isAuthModalOpen ? (
+        <AuthModal onClose={() => setIsAuthModalOpen(false)} />
+      ) : null}
     </div>
   );
 }

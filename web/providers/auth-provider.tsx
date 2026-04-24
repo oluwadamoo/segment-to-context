@@ -4,6 +4,7 @@ import {
   createContext,
   useContext,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import {
@@ -15,6 +16,7 @@ import {
   clearStoredSession,
   loadStoredSession,
   saveStoredSession,
+  subscribeToStoredSession,
 } from "@/lib/auth/storage";
 import type {
   AuthSession,
@@ -38,16 +40,18 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [authState, setAuthState] = useState(() => getInitialAuthState());
+  const session = useSyncExternalStore(
+    subscribeToStoredSession,
+    loadStoredSession,
+    () => null,
+  );
   const [latestIssuedApiKey, setLatestIssuedApiKey] = useState<string | null>(
-    null
+    null,
   );
 
+  const status: AuthStatus = session ? "authenticated" : "unauthenticated";
+
   function applySession(nextSession: AuthSession) {
-    setAuthState({
-      status: "authenticated",
-      session: nextSession,
-    });
     saveStoredSession(nextSession);
   }
 
@@ -69,19 +73,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function rotateApiKey() {
-    if (!authState.session?.accessToken) {
+    if (!session?.accessToken) {
       throw new Error("You must be signed in to rotate your API key.");
     }
 
-    const result = await rotateTenantApiKey(authState.session.accessToken);
+    const result = await rotateTenantApiKey(session.accessToken);
     return result.apiKey;
   }
 
   function logout() {
-    setAuthState({
-      status: "unauthenticated",
-      session: null,
-    });
     setLatestIssuedApiKey(null);
     clearStoredSession();
   }
@@ -93,8 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider
       value={{
-        status: authState.status,
-        session: authState.session,
+        status,
+        session,
         latestIssuedApiKey,
         signUp,
         login,
@@ -116,23 +116,4 @@ export function useAuth() {
   }
 
   return context;
-}
-
-function getInitialAuthState(): {
-  status: AuthStatus;
-  session: AuthSession | null;
-} {
-  const storedSession = loadStoredSession();
-
-  if (storedSession) {
-    return {
-      status: "authenticated",
-      session: storedSession,
-    };
-  }
-
-  return {
-    status: "unauthenticated",
-    session: null,
-  };
 }

@@ -10,7 +10,11 @@ import { cn } from "@/lib/utils";
 
 type AuthMode = "signup" | "login";
 
-export function AuthModal() {
+type AuthModalProps = {
+  onClose?: () => void;
+};
+
+export function AuthModal({ onClose }: AuthModalProps) {
   const {
     latestIssuedApiKey,
     clearIssuedApiKey,
@@ -20,6 +24,7 @@ export function AuthModal() {
   } = useAuth();
   const [mode, setMode] = useState<AuthMode>("signup");
   const [copied, setCopied] = useState(false);
+  const canDismiss = Boolean(onClose) && !latestIssuedApiKey;
 
   const title = useMemo(() => {
     if (latestIssuedApiKey) {
@@ -87,7 +92,10 @@ export function AuthModal() {
               <Button
                 className="flex-1"
                 variant="outline"
-                onClick={clearIssuedApiKey}
+                onClick={() => {
+                  clearIssuedApiKey();
+                  onClose?.();
+                }}
               >
                 Continue
               </Button>
@@ -99,6 +107,14 @@ export function AuthModal() {
           </div>
         ) : (
           <>
+            {canDismiss ? (
+              <div className="mb-4 flex justify-end">
+                <Button variant="ghost" size="sm" onClick={onClose}>
+                  Close
+                </Button>
+              </div>
+            ) : null}
+
             <div className="mb-5 grid grid-cols-2 gap-2 rounded-2xl border border-border bg-muted/40 p-1">
               <button
                 type="button"
