@@ -2,7 +2,7 @@ FROM node:22-alpine AS deps
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci
 
 FROM node:22-alpine AS build
 WORKDIR /app
@@ -15,11 +15,14 @@ RUN npm run build
 
 FROM node:22-alpine AS runtime
 WORKDIR /app
+
+ARG APP_TARGET=api
 ENV NODE_ENV=production
+ENV APP_TARGET=${APP_TARGET}
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY package.json package-lock.json ./
 
 EXPOSE 5300
-CMD ["node", "dist/api.js"]
+CMD ["sh", "-c", "node dist/${APP_TARGET}.js"]
