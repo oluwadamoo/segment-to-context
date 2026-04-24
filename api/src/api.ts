@@ -13,8 +13,8 @@ async function bootstrap() {
 
     const server = createServer(buildApiApp(realtimeSubscriber));
 
-    server.listen(env.APP_PORT, () => {
-        logger.info(`Api service listening on http://localhost:${env.APP_PORT}`);
+    server.listen(env.PORT, () => {
+        logger.info(`Api service listening on http://localhost:${env.PORT}`);
     });
 
     const shutdown = async () => {

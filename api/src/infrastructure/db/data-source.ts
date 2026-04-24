@@ -32,8 +32,8 @@ export async function initializeDatabase() {
         try {
             await AppDataSource.initialize();
 
-            await AppDataSource.query(`CREATE EXTENSION IF NOT EXISTS "pgcrypto";`);
-            await AppDataSource.runMigrations();
+            // await AppDataSource.query(`CREATE EXTENSION IF NOT EXISTS "pgcrypto";`);
+            // await AppDataSource.runMigrations();
 
         } catch (error) {
             attempt += 1;

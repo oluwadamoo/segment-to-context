@@ -4,7 +4,7 @@ import { z } from "zod";
 config();
 
 export const env = z.object({
-    APP_PORT: z.coerce.number().default(8090),
+    PORT: z.coerce.number().default(8090),
 
     DB_HOST: z.string().min(1),
     DB_PORT: z.coerce.number().default(5432),

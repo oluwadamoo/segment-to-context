@@ -42,13 +42,13 @@ db.on("exit", (code) => {
 
   children.push(
     run("npx", ["ts-node-dev", "--respawn", "--transpile-only", "src/api.ts"], {
-      env: { ...process.env, APP_PORT: "5300" },
+      env: { ...process.env, PORT: "5300" },
     }),
   );
 
   children.push(
     run("npx", ["ts-node-dev", "--respawn", "--transpile-only", "src/processor.ts"], {
-      env: { ...process.env, APP_PORT: "5301" },
+      env: { ...process.env, PORT: "5301" },
     }),
   );
 });

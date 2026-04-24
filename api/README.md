@@ -54,7 +54,7 @@ npm run migration:run
 The service expects these variables:
 
 ```env
-APP_PORT=5300
+PORT=5300
 
 DB_HOST=localhost
 DB_PORT=5436
