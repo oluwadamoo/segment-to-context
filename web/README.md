@@ -86,3 +86,5 @@ In a monorepo, deploy only this folder by setting:
 - **Root Directory** = `web`
 
 That keeps the deployment isolated from `api/` and `browser-sdk/`.
+
+Website available at: [https://segment-to-context-web.vercel.app/](https://segment-to-context-web.vercel.app/)

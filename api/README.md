@@ -249,3 +249,5 @@ The intended deployment target is Google Cloud Run:
 - Pub/Sub for async messaging
 
 Keep deployment config separate from local development. The application is already structured for that split.
+
+Live endpoint available at: [https://segment-to-context-api-101914438119.us-central1.run.app](https://segment-to-context-api-101914438119.us-central1.run.app)

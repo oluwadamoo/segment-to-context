@@ -30,3 +30,6 @@ http://localhost:4173
 - paste a real tenant API key to enable tracking
 - the event log in the UI shows what the app is trying to send
 - the real validation should happen in your main dashboard stream
+
+Website available at: [https://segment-to-context-sdk-demo.vercel.app/](https://segment-to-context-sdk-demo.vercel.app/)
+
