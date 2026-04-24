@@ -9,8 +9,9 @@ async function bootstrap() {
 
     const server = createServer(buildProcessorApp());
 
-    server.listen(env.PORT, () => {
-        logger.info(`Processor service listening on  http://localhost:${env.PORT}`);
+    const port = process.env.PORT || env.APP_PORT
+    server.listen(port, () => {
+        logger.info(`Processor service listening on  http://localhost:${port}`);
     });
 }
 
