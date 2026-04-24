@@ -11,12 +11,7 @@ import {
   Sparkles,
   UserRound,
 } from "lucide-react";
-import {
-  AnimatePresence,
-  domAnimation,
-  LazyMotion,
-  m,
-} from "framer-motion";
+import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,7 +19,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -395,7 +389,9 @@ export function AuthenticatedDashboard({
                                           <ArrowDownLeft className="size-3" />
                                           ingested
                                         </Badge>
-                                        <p>{formatTimestamp(event.timestamp)}</p>
+                                        <p>
+                                          {formatTimestamp(event.timestamp)}
+                                        </p>
                                       </div>
                                     </div>
 
@@ -560,11 +556,6 @@ export function AuthenticatedDashboard({
                             <CardContent className="text-sm leading-7 text-muted-foreground">
                               {selectedUserPersona.recommendedAction}
                             </CardContent>
-                            <CardFooter>
-                              <Button size="lg" className="w-full">
-                                Recommended Action
-                              </Button>
-                            </CardFooter>
                           </Card>
                         </div>
                       </>
