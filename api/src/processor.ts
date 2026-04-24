@@ -2,10 +2,10 @@ import { createServer } from "node:http";
 import { env } from "./config/env";
 import { logger } from "./config/logger";
 import { buildProcessorApp } from "./app/builders";
-import { initializeDatabase } from "./infrastructure/db/data-source";
+// import { initializeDatabase } from "./infrastructure/db/data-source";
 
 async function bootstrap() {
-    await initializeDatabase();
+    // await initializeDatabase();
 
     const server = createServer(buildProcessorApp());
 
