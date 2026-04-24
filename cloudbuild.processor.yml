@@ -52,7 +52,7 @@ substitutions:
   _RAW_EVENTS_TOPIC: "raw-events-topic"
   _PERSONA_REFRESH_TOPIC: "persona-refresh"
   _PUBSUB_PUSH_AUTH_ENABLED: "true"
-  _PUBSUB_PUSH_AUDIENCE: "https://your-processor-cloud-run-url"
+  _PUBSUB_PUSH_AUDIENCE: "https://segment-to-context-processor-101914438119.us-central1.run.app"
   _PUBSUB_PUSH_SERVICE_ACCOUNT_EMAIL: "admin-386@project-879224b7-6097-4fb1-9a6.iam.gserviceaccount.com"
   _JWT_EXPIRES_IN: "24h"
   _TENANT_EVENTS_CHANNEL: "tenant_events_stream"
