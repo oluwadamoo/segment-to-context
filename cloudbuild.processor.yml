@@ -48,7 +48,7 @@ substitutions:
   _AR_REPOSITORY: "segment-to-context"
   _IMAGE_NAME: "processor"
   _RUNTIME_SERVICE_ACCOUNT: "admin-386@project-879224b7-6097-4fb1-9a6.iam.gserviceaccount.com"
-  _CLOUDSQL_INSTANCE: "project-879224b7-6097-4fb1-9a6:us-central1:segment-to-context-db"
+  _CLOUDSQL_INSTANCE: "project-879224b7-6097-4fb1-9a6:us-central1:db-instance"
   _RAW_EVENTS_TOPIC: "raw-events-topic"
   _PERSONA_REFRESH_TOPIC: "persona-refresh"
   _PUBSUB_PUSH_AUTH_ENABLED: "true"
