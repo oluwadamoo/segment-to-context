@@ -11,8 +11,14 @@ describe("EventController", () => {
                 messageId: "msg-1",
             }),
         };
+        const getEventHistoryUseCase = {
+            execute: vi.fn(),
+        };
 
-        const controller = new EventController(publishRawEventUseCase as never);
+        const controller = new EventController(
+            publishRawEventUseCase as never,
+            getEventHistoryUseCase as never,
+        );
 
         const req = {
             body: {
@@ -58,7 +64,10 @@ describe("EventController", () => {
     });
 
     it("forwards an UnauthorizedError when the tenant is missing", async () => {
-        const controller = new EventController({ execute: vi.fn() } as never);
+        const controller = new EventController(
+            { execute: vi.fn() } as never,
+            { execute: vi.fn() } as never,
+        );
 
         const req = {
             body: {
@@ -79,5 +88,80 @@ describe("EventController", () => {
         await controller.ingestEvent(req, res, next);
 
         expect(next).toHaveBeenCalledWith(expect.any(UnauthorizedError));
+    });
+
+    it("returns paginated tenant event history", async () => {
+        const getEventHistoryUseCase = {
+            execute: vi.fn().mockResolvedValue({
+                items: [
+                    {
+                        id: "evt-1",
+                        tenantId: "tenant-123",
+                        userId: "2",
+                        eventType: "purchase",
+                        payload: { product: "Aurora Headphones" },
+                        createdAt: new Date("2026-04-24T08:00:00.000Z"),
+                        processed: true,
+                    },
+                ],
+                nextCursor: {
+                    createdAt: new Date("2026-04-24T08:00:00.000Z"),
+                    id: "evt-1",
+                },
+            }),
+        };
+
+        const controller = new EventController(
+            { execute: vi.fn() } as never,
+            getEventHistoryUseCase as never,
+        );
+
+        const req = {
+            query: {
+                limit: "25",
+            },
+            authenticatedTenant: {
+                tenantId: "tenant-123",
+                email: "tenant@example.com",
+            },
+        } as unknown as Request;
+
+        const res = {
+            status: vi.fn().mockReturnThis(),
+            json: vi.fn(),
+        } as unknown as Response;
+
+        const next = vi.fn();
+
+        await controller.getHistory(req, res, next);
+
+        expect(getEventHistoryUseCase.execute).toHaveBeenCalledWith({
+            tenantId: "tenant-123",
+            limit: 25,
+            cursor: undefined,
+        });
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({
+            status: "success",
+            data: {
+                items: [
+                    {
+                        id: "evt-1",
+                        tenantId: "tenant-123",
+                        userId: "2",
+                        eventType: "purchase",
+                        payload: { product: "Aurora Headphones" },
+                        createdAt: "2026-04-24T08:00:00.000Z",
+                        processed: true,
+                    },
+                ],
+                nextCursor: {
+                    createdAt: "2026-04-24T08:00:00.000Z",
+                    id: "evt-1",
+                },
+            },
+        });
+        expect(next).not.toHaveBeenCalled();
     });
 });

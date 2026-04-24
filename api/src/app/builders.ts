@@ -4,6 +4,7 @@ import { createApp } from "./create-app";
 import { EventController } from "../modules/events/presentation/http/event.controller";
 import { RawEventsPushController } from "../modules/events/presentation/http/raw-events-push.controller";
 import { PersonaRefreshPushController } from "../modules/persona/presentation/http/persona-refresh-push.controller";
+import { GetEventHistoryUseCase } from "../modules/events/application/use-cases/get-event-history.use-case";
 import { PublishRawEventUseCase } from "../modules/events/application/use-cases/publish-raw-event.use-case";
 import { PersistRawEventUseCase } from "../modules/events/application/use-cases/persist-raw-event.use-case";
 import { ProcessPersonaRefreshUseCase } from "../modules/persona/application/use-cases/process-persona-refresh.use-case";
@@ -45,6 +46,7 @@ export function buildApiApp(realtimeSubscriber: RealtimeSubscriberPort) {
     const apiKeyService = new TenantApiKeyService();
     const tenantTokenService = new JwtTenantTokenService();
     const personaRepository = new PersonaRepository();
+    const eventRepository = new EventRepository();
 
     const tenantAuthController = new TenantAuthController(
         new SignupTenantUseCase(
@@ -65,7 +67,10 @@ export function buildApiApp(realtimeSubscriber: RealtimeSubscriberPort) {
     );
 
     const rawEventsPublisher = new PubSubJsonPublisher<IngestEventDTO>(env.RAW_EVENTS_TOPIC);
-    const eventController = new EventController(new PublishRawEventUseCase(rawEventsPublisher));
+    const eventController = new EventController(
+        new PublishRawEventUseCase(rawEventsPublisher),
+        new GetEventHistoryUseCase(eventRepository),
+    );
 
     const getUserPersonaUseCase = new GetUserPersonaUseCase(personaRepository);
     const personaController = new PersonaController(getUserPersonaUseCase);
@@ -92,6 +97,12 @@ export function buildApiApp(realtimeSubscriber: RealtimeSubscriberPort) {
         "/api/v1/sdk/events",
         requireTenantApiKey(tenantRepository, apiKeyService),
         eventController.ingestEvent,
+    );
+
+    router.get(
+        "/api/v1/events/history",
+        requireTenantAuth(tenantTokenService),
+        eventController.getHistory,
     );
 
 

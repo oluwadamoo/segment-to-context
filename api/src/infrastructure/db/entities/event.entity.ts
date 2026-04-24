@@ -8,6 +8,7 @@ import {
 
 @Entity("events")
 @Index("IDX_events_tenant_user_created_at", ["tenantId", "userId", "createdAt"])
+@Index("IDX_events_tenant_created_at_id", ["tenantId", "createdAt", "id"])
 @Index("IDX_events_unprocessed_by_user", ["tenantId", "userId", "createdAt"], {
     where: `"processed" = false`,
 })

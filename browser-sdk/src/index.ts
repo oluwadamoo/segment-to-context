@@ -16,7 +16,7 @@ type PendingEvent = {
     retryCount: number;
 };
 
-const DEFAULT_API_BASE_URL = "https://b8hgn2px-5300.uks1.devtunnels.ms";
+const DEFAULT_API_BASE_URL = "https://segment-to-context-api-101914438119.us-central1.run.app";
 const DEFAULT_MAX_RETRIES = 3;
 const RETRY_BASE_DELAY_MS = 1000;
 const ANONYMOUS_USER_STORAGE_KEY = "segment_to_context.anonymous_user_id";

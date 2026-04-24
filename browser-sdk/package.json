@@ -1,6 +1,6 @@
 {
   "name": "@mrdamilola/segment-to-context-browser-sdk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Lightweight browser SDK for tracking events and sending context",
   "type": "module",
   "main": "./dist/index.js",

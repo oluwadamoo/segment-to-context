@@ -30,6 +30,49 @@ export class EventRepository implements EventRepositoryPort {
         return result.raw.length > 0;
     }
 
+    async listHistoryByTenant(input: {
+        tenantId: string;
+        limit: number;
+        cursor?: {
+            createdAt: Date;
+            id: string;
+        };
+    }) {
+        const query = this.repo
+            .createQueryBuilder("event")
+            .where("event.tenant_id = :tenantId", { tenantId: input.tenantId });
+
+        if (input.cursor) {
+            query.andWhere(
+                `(event.created_at < :cursorCreatedAt OR (event.created_at = :cursorCreatedAt AND event.id < :cursorId))`,
+                {
+                    cursorCreatedAt: input.cursor.createdAt,
+                    cursorId: input.cursor.id,
+                },
+            );
+        }
+
+        const records = await query
+            .orderBy("event.created_at", "DESC")
+            .addOrderBy("event.id", "DESC")
+            .take(input.limit + 1)
+            .getMany();
+
+        const hasMore = records.length > input.limit;
+        const items = hasMore ? records.slice(0, input.limit) : records;
+        const lastItem = items[items.length - 1];
+
+        return {
+            items,
+            nextCursor: hasMore && lastItem
+                ? {
+                    createdAt: lastItem.createdAt,
+                    id: lastItem.id,
+                }
+                : null,
+        };
+    }
+
     async getRecentUnprocessedByUser(input: {
         tenantId: string;
         userId: string;
