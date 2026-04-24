@@ -23,6 +23,7 @@ export async function verifyPubSubPushAuth(req: Request, res: Response, next: Ne
 
         const idToken = authorizationHeader.slice("Bearer ".length);
 
+        console.log(env.PUBSUB_PUSH_AUDIENCE, "AUDIENCE...")
         const ticket = await oauthClient.verifyIdToken({
             idToken,
             audience: env.PUBSUB_PUSH_AUDIENCE,
