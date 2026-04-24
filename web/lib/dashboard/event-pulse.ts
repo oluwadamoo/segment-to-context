@@ -25,6 +25,27 @@ export type EventIngestedMessage = {
   };
 };
 
+export type EventHistoryRecord = {
+  id: string;
+  tenantId: string;
+  userId: string;
+  eventType: string;
+  payload: Record<string, unknown>;
+  createdAt: string;
+  processed: boolean;
+};
+
+export type EventHistoryResponse = {
+  status: "success";
+  data: {
+    items: EventHistoryRecord[];
+    nextCursor: {
+      createdAt: string;
+      id: string;
+    } | null;
+  };
+};
+
 export type UserPersona = {
   userId: string;
   archetype: string;
@@ -216,19 +237,36 @@ export function deriveUserPersona(
 export function mapStreamMessageToEventStreamItem(
   message: EventIngestedMessage
 ): EventStreamItem {
-  const payload = message.event.payload;
-
   return {
     id: message.event.id,
     userId: message.event.userId,
     eventType: message.event.eventType,
+    ...mapPayloadFields(message.event.payload),
+    timestamp: message.event.timestamp,
+    payload: message.event.payload,
+  };
+}
+
+export function mapStoredEventToEventStreamItem(
+  event: EventHistoryRecord
+): EventStreamItem {
+  return {
+    id: event.id,
+    userId: event.userId,
+    eventType: event.eventType,
+    ...mapPayloadFields(event.payload),
+    timestamp: event.createdAt,
+    payload: event.payload,
+  };
+}
+
+function mapPayloadFields(payload: Record<string, unknown>) {
+  return {
     product: readString(payload.product, "Unknown product"),
     category: readString(payload.category, "uncategorized"),
     channel: readString(payload.channel, readString(payload.browser, "unknown")),
     brand: readString(payload.brand, "Unknown brand"),
     price: readNumber(payload.price, 0),
-    timestamp: message.event.timestamp,
-    payload,
   };
 }
 

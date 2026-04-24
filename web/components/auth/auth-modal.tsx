@@ -26,17 +26,19 @@ export function AuthModal() {
       return "Your account is ready";
     }
 
-    return mode === "signup" ? "Create your tenant account" : "Sign in with your API key";
+    return mode === "signup"
+      ? "Create your tenant account"
+      : "Sign in to your dashboard";
   }, [latestIssuedApiKey, mode]);
 
   const subtitle = useMemo(() => {
     if (latestIssuedApiKey) {
-      return "Copy and keep this API key somewhere safe. You will use it to sign in again later.";
+      return "Copy and keep this API key somewhere safe. You will use it in your SDK or website integration.";
     }
 
     return mode === "signup"
       ? "Start with email and password. We will generate your tenant API key automatically."
-      : "Use the API key issued to your tenant account to get back in.";
+      : "Use your tenant email and password to access the dashboard.";
   }, [latestIssuedApiKey, mode]);
 
   async function copyApiKey() {
@@ -138,9 +140,9 @@ export function AuthModal() {
                 How it works
               </div>
               <p className="leading-6">
-                Signup gives you both a JWT session and a tenant API key. Later
-                logins use the API key, while event requests use the bearer
-                token.
+                Signup gives you a dashboard session and a tenant API key. You
+                sign in with email and password, while the API key is meant for
+                SDK and browser event ingestion.
               </p>
             </div>
           </>

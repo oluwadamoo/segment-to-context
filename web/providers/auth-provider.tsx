@@ -6,7 +6,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { loginTenant, signupTenant } from "@/lib/auth/client";
+import {
+  loginTenant,
+  rotateTenantApiKey,
+  signupTenant,
+} from "@/lib/auth/client";
 import {
   clearStoredSession,
   loadStoredSession,
@@ -26,6 +30,7 @@ type AuthContextValue = {
   latestIssuedApiKey: string | null;
   signUp: (values: SignupFormValues) => Promise<void>;
   login: (values: LoginFormValues) => Promise<void>;
+  rotateApiKey: () => Promise<string>;
   logout: () => void;
   clearIssuedApiKey: () => void;
 };
@@ -63,6 +68,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLatestIssuedApiKey(null);
   }
 
+  async function rotateApiKey() {
+    if (!authState.session?.accessToken) {
+      throw new Error("You must be signed in to rotate your API key.");
+    }
+
+    const result = await rotateTenantApiKey(authState.session.accessToken);
+    return result.apiKey;
+  }
+
   function logout() {
     setAuthState({
       status: "unauthenticated",
@@ -84,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         latestIssuedApiKey,
         signUp,
         login,
+        rotateApiKey,
         logout,
         clearIssuedApiKey,
       }}

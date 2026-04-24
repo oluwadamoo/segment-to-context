@@ -16,6 +16,10 @@ export type SignupResult = AuthSession & {
 
 export type LoginResult = AuthSession;
 
+export type RotateApiKeyResult = {
+  apiKey: string;
+};
+
 export type AuthEnvelope<T> = {
   status: string;
   data: T;
@@ -27,5 +31,6 @@ export type SignupFormValues = {
 };
 
 export type LoginFormValues = {
-  apiKey: string;
+  email: string;
+  password: string;
 };

@@ -44,7 +44,7 @@ export function Dashboard() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(34,197,94,0.08),_transparent_30%)]" />
 
       <div className="relative mx-auto flex min-h-screen w-full max-w-[1600px] flex-col px-4 py-4 md:px-6">
-        <header className="flex items-center justify-between rounded-3xl border border-border bg-card/80 px-5 py-4 shadow-[0_24px_80px_-48px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+        <header className="flex flex-col gap-4 rounded-3xl border border-border bg-card/80 px-4 py-4 shadow-[0_24px_80px_-48px_rgba(0,0,0,0.8)] backdrop-blur-xl md:flex-row md:items-center md:justify-between md:px-5">
           <div className="space-y-1">
             <div className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">
               Segment To Context
@@ -54,13 +54,13 @@ export function Dashboard() {
             </p>
           </div>
 
-          <div className="rounded-full border border-border bg-background px-4 py-2 text-sm text-muted-foreground">
+          <div className="w-fit rounded-full border border-border bg-background px-4 py-2 text-sm text-muted-foreground">
             Authentication required
           </div>
         </header>
 
         <main className="flex flex-1 items-center justify-center py-4">
-          <div className="w-full max-w-3xl rounded-[2rem] border border-border bg-card/70 p-8 text-center shadow-[0_24px_120px_-64px_rgba(0,0,0,0.95)] backdrop-blur-xl">
+          <div className="w-full max-w-3xl rounded-[2rem] border border-border bg-card/70 p-5 text-center shadow-[0_24px_120px_-64px_rgba(0,0,0,0.95)] backdrop-blur-xl sm:p-8">
             <div className="mx-auto max-w-xl space-y-4">
               <div className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-primary">
                 Event Pulse

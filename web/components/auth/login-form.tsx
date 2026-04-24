@@ -21,7 +21,8 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      apiKey: "",
+      email: "",
+      password: "",
     },
   });
 
@@ -40,20 +41,36 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
   return (
     <form className="space-y-4" onSubmit={handleSubmit(submit)}>
       <div className="space-y-2">
-        <label
-          htmlFor="apiKey"
-          className="text-sm font-medium text-foreground"
-        >
-          API key
+        <label htmlFor="email" className="text-sm font-medium text-foreground">
+          Email
         </label>
         <Input
-          id="apiKey"
-          placeholder="stc_xxxxxxxxxxxxxxxxx"
-          autoComplete="off"
-          {...register("apiKey")}
+          id="email"
+          placeholder="tenant@example.com"
+          autoComplete="email"
+          {...register("email")}
         />
-        {errors.apiKey ? (
-          <p className="text-sm text-destructive">{errors.apiKey.message}</p>
+        {errors.email ? (
+          <p className="text-sm text-destructive">{errors.email.message}</p>
+        ) : null}
+      </div>
+
+      <div className="space-y-2">
+        <label
+          htmlFor="login-password"
+          className="text-sm font-medium text-foreground"
+        >
+          Password
+        </label>
+        <Input
+          id="login-password"
+          type="password"
+          placeholder="Enter your password"
+          autoComplete="current-password"
+          {...register("password")}
+        />
+        {errors.password ? (
+          <p className="text-sm text-destructive">{errors.password.message}</p>
         ) : null}
       </div>
 
