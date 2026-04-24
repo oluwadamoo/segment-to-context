@@ -2,18 +2,16 @@ import { createServer } from "node:http";
 import { env } from "./config/env";
 import { logger } from "./config/logger";
 import { buildApiApp } from "./app/builders";
-// import { initializeDatabase } from "./infrastructure/db/data-source";
-// import { PostgresRealtimeSubscriber } from "./infrastructure/realtime/postgres-realtime-subscriber";
+import { initializeDatabase } from "./infrastructure/db/data-source";
+import { PostgresRealtimeSubscriber } from "./infrastructure/realtime/postgres-realtime-subscriber";
 
 async function bootstrap() {
-    // await initializeDatabase();
+    await initializeDatabase();
 
-    // const realtimeSubscriber = new PostgresRealtimeSubscriber();
-    // await realtimeSubscriber.start();
+    const realtimeSubscriber = new PostgresRealtimeSubscriber();
+    await realtimeSubscriber.start();
 
-    const server = createServer(buildApiApp(
-        // realtimeSubscriber
-    ));
+    const server = createServer(buildApiApp(realtimeSubscriber));
 
     const port = process.env.PORT || env.APP_PORT
     server.listen(port, () => {
@@ -21,7 +19,7 @@ async function bootstrap() {
     });
 
     const shutdown = async () => {
-        // await realtimeSubscriber.stop();
+        await realtimeSubscriber.stop();
         server.close(() => process.exit(0));
     };
 

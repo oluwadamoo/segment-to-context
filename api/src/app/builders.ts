@@ -24,8 +24,8 @@ import { RotateTenantApiKeyUseCase } from "../modules/tenants/application/use-ca
 import { SignupTenantUseCase } from "../modules/tenants/application/use-cases/signup-tenant.use-case";
 import { requireTenantAuth } from "../modules/tenants/presentation/http/require-tenant-auth";
 import { PostgresRealtimePublisher } from "../infrastructure/realtime/postgres-realtime-publisher";
-// import type { RealtimeSubscriberPort } from "../modules/realtime/application/ports/realtime-subscriber.port";
-// import { RealtimeController } from "../modules/realtime/presentation/http/realtime.controller";
+import type { RealtimeSubscriberPort } from "../modules/realtime/application/ports/realtime-subscriber.port";
+import { RealtimeController } from "../modules/realtime/presentation/http/realtime.controller";
 import { GetUserPersonaUseCase } from "../modules/persona/application/use-cases/get-user-persona.use-case";
 import { PersonaController } from "../modules/persona/presentation/http/persona.controller";
 import { requireTenantApiKey } from "../modules/tenants/presentation/http/require-tenant-apikey";
@@ -36,9 +36,7 @@ function attachHealthRoute(router: Router) {
     });
 }
 
-export function buildApiApp(
-    // realtimeSubscriber: RealtimeSubscriberPort
-) {
+export function buildApiApp(realtimeSubscriber: RealtimeSubscriberPort) {
     const router = Router();
     attachHealthRoute(router);
 
@@ -71,10 +69,10 @@ export function buildApiApp(
 
     const getUserPersonaUseCase = new GetUserPersonaUseCase(personaRepository);
     const personaController = new PersonaController(getUserPersonaUseCase);
-    // const realtimeController = new RealtimeController(
-    //     realtimeSubscriber,
-    //     getUserPersonaUseCase,
-    // );
+    const realtimeController = new RealtimeController(
+        realtimeSubscriber,
+        getUserPersonaUseCase,
+    );
 
     router.post("/api/v1/auth/signup", tenantAuthController.signup);
     router.post("/api/v1/auth/login", tenantAuthController.login);
@@ -103,17 +101,17 @@ export function buildApiApp(
         personaController.getByUserId,
     );
 
-    // router.get(
-    //     "/api/v1/stream/events",
-    //     requireTenantAuth(tenantTokenService),
-    //     realtimeController.streamTenantEvents,
-    // );
+    router.get(
+        "/api/v1/stream/events",
+        requireTenantAuth(tenantTokenService),
+        realtimeController.streamTenantEvents,
+    );
 
-    // router.get(
-    //     "/api/v1/stream/personas/:userId",
-    //     requireTenantAuth(tenantTokenService),
-    //     realtimeController.streamUserPersona,
-    // );
+    router.get(
+        "/api/v1/stream/personas/:userId",
+        requireTenantAuth(tenantTokenService),
+        realtimeController.streamUserPersona,
+    );
 
     return createApp(router);
 }
