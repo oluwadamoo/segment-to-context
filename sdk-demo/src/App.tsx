@@ -97,8 +97,9 @@ const products: Product[] = [
 const featuredProduct = products[0];
 
 export default function App() {
-  const clientRef =
-    useRef<ReturnType<typeof createSegmentToContextClient> | null>(null);
+  const clientRef = useRef<ReturnType<
+    typeof createSegmentToContextClient
+  > | null>(null);
   const [route, setRoute] = useState<RouteState>(() => getRouteFromLocation());
   const [cart, setCart] = useState<CartItem[]>([]);
   const [apiKey, setApiKey] = useState("");
@@ -110,15 +111,17 @@ export default function App() {
 
   const cartCount = useMemo(
     () => cart.reduce((sum, item) => sum + item.quantity, 0),
-    [cart]
+    [cart],
   );
   const cartTotal = useMemo(
-    () => cart.reduce((sum, item) => sum + item.quantity * item.product.price, 0),
-    [cart]
+    () =>
+      cart.reduce((sum, item) => sum + item.quantity * item.product.price, 0),
+    [cart],
   );
   const selectedProduct =
     route.view === "product"
-      ? products.find((product) => product.id === route.productId) ?? featuredProduct
+      ? (products.find((product) => product.id === route.productId) ??
+        featuredProduct)
       : featuredProduct;
 
   useEffect(() => {
@@ -162,12 +165,16 @@ export default function App() {
 
     clientRef.current = createSegmentToContextClient(options);
     setIsConnected(true);
-    setSetupMessage("SDK connected. Use your main dashboard to observe live events.");
+    setSetupMessage(
+      "SDK connected. Use your main dashboard to observe live events.",
+    );
   }
 
   async function handleConnect() {
     if (!apiKey.trim()) {
-      setSetupMessage("Add a tenant API key before enabling the demo tracking.");
+      setSetupMessage(
+        "Add a tenant API key before enabling the demo tracking.",
+      );
       return;
     }
 
@@ -186,10 +193,11 @@ export default function App() {
       nextRoute.view === "home"
         ? "/"
         : nextRoute.view === "cart"
-        ? "/cart"
-        : `/products/${
-            products.find((product) => product.id === nextRoute.productId)?.slug ?? ""
-          }`;
+          ? "/cart"
+          : `/products/${
+              products.find((product) => product.id === nextRoute.productId)
+                ?.slug ?? ""
+            }`;
 
     window.history.pushState({}, "", nextPath);
     setRoute(nextRoute);
@@ -198,7 +206,7 @@ export default function App() {
   async function sendEvent(
     eventType: string,
     payload: Record<string, unknown>,
-    fallbackMessage: string
+    fallbackMessage: string,
   ) {
     if (!clientRef.current) {
       setSetupMessage(fallbackMessage);
@@ -211,7 +219,7 @@ export default function App() {
       setSetupMessage(
         error instanceof Error
           ? error.message
-          : "The SDK could not send the event right now."
+          : "The SDK could not send the event right now.",
       );
     }
   }
@@ -227,7 +235,7 @@ export default function App() {
         category: product.category,
         price: product.price,
       },
-      "Tracking is not active yet, so product views are not being sent."
+      "Tracking is not active yet, so product views are not being sent.",
     );
   }
 
@@ -242,7 +250,7 @@ export default function App() {
       return current.map((item) =>
         item.product.id === product.id
           ? { ...item, quantity: item.quantity + 1 }
-          : item
+          : item,
       );
     });
 
@@ -255,7 +263,7 @@ export default function App() {
         price: product.price,
         quantity: 1,
       },
-      "Tracking is not active yet, so cart events are not being sent."
+      "Tracking is not active yet, so cart events are not being sent.",
     );
   }
 
@@ -267,9 +275,9 @@ export default function App() {
         .map((entry) =>
           entry.product.id === productId
             ? { ...entry, quantity: Math.max(0, entry.quantity + delta) }
-            : entry
+            : entry,
         )
-        .filter((entry) => entry.quantity > 0)
+        .filter((entry) => entry.quantity > 0),
     );
 
     if (item && delta > 0) {
@@ -282,7 +290,7 @@ export default function App() {
           price: item.product.price,
           quantity: 1,
         },
-        "Tracking is not active yet, so cart events are not being sent."
+        "Tracking is not active yet, so cart events are not being sent.",
       );
     }
   }
@@ -296,7 +304,7 @@ export default function App() {
         cartValue: Number(cartTotal.toFixed(2)),
         itemCount: cartCount,
       },
-      "Tracking is not active yet, so checkout events are not being sent."
+      "Tracking is not active yet, so checkout events are not being sent.",
     );
   }
 
@@ -319,7 +327,7 @@ export default function App() {
           price: item.product.price,
         })),
       },
-      "Tracking is not active yet, so purchase events are not being sent."
+      "Tracking is not active yet, so purchase events are not being sent.",
     );
 
     setCart([]);
@@ -339,8 +347,12 @@ export default function App() {
 
         <nav className="store-nav" aria-label="Primary">
           <button onClick={() => navigateTo({ view: "home" })}>Shop</button>
-          <button onClick={() => handleViewProduct(featuredProduct)}>Featured</button>
-          <button onClick={() => navigateTo({ view: "cart" })}>Bag {cartCount}</button>
+          <button onClick={() => handleViewProduct(featuredProduct)}>
+            Featured
+          </button>
+          <button onClick={() => navigateTo({ view: "cart" })}>
+            Bag {cartCount}
+          </button>
         </nav>
 
         <button
@@ -356,17 +368,22 @@ export default function App() {
       <section className="hero-card">
         <div className="hero-copy">
           <p className="hero-label">Summer edit</p>
-          <h2>Quiet, useful tech that feels at home on your desk and in your bag.</h2>
+          <h2>
+            Quiet, useful tech that feels at home on your desk and in your bag.
+          </h2>
           <p>
-            A tiny storefront demo built to feel like a real ecommerce experience.
-            Browsing, product views, add-to-cart moments, and checkout all happen
-            naturally while the SDK runs in the background.
+            A tiny storefront demo built to feel like a real ecommerce
+            experience. Browsing, product views, add-to-cart moments, and
+            checkout all happen naturally while the SDK runs in the background.
           </p>
           <div className="hero-actions">
             <button onClick={() => handleViewProduct(featuredProduct)}>
               Shop the lead drop
             </button>
-            <button className="secondary" onClick={() => navigateTo({ view: "home" })}>
+            <button
+              className="secondary"
+              onClick={() => navigateTo({ view: "home" })}
+            >
               Explore collection
             </button>
           </div>
@@ -385,7 +402,9 @@ export default function App() {
       {route.view === "product" ? (
         <ProductDetailView
           product={selectedProduct}
-          relatedProducts={products.filter((item) => item.id !== selectedProduct.id).slice(0, 3)}
+          relatedProducts={products
+            .filter((item) => item.id !== selectedProduct.id)
+            .slice(0, 3)}
           onBack={() => navigateTo({ view: "home" })}
           onAddToCart={handleAddToCart}
           onViewProduct={handleViewProduct}
@@ -405,7 +424,10 @@ export default function App() {
               <p className="eyebrow">Featured catalog</p>
               <h2>Chosen for hybrid work, travel, and creator routines</h2>
             </div>
-            <button className="inline-link" onClick={() => handleViewProduct(products[2])}>
+            <button
+              className="inline-link"
+              onClick={() => handleViewProduct(products[2])}
+            >
               Browse creator gear
               <ChevronRight className="size-4" />
             </button>
@@ -436,8 +458,13 @@ export default function App() {
                 </div>
 
                 <div className="product-actions">
-                  <button onClick={() => handleViewProduct(product)}>View details</button>
-                  <button className="secondary" onClick={() => handleAddToCart(product)}>
+                  <button onClick={() => handleViewProduct(product)}>
+                    View details
+                  </button>
+                  <button
+                    className="secondary"
+                    onClick={() => handleAddToCart(product)}
+                  >
                     Add to cart
                   </button>
                 </div>
@@ -474,8 +501,8 @@ export default function App() {
             </div>
 
             <p className="demo-panel-copy">
-              This panel is only here for demo setup. In a real storefront, customers
-              would never see tracking controls or event output.
+              This panel is only here for demo setup. In a real storefront,
+              customers would never see tracking controls or event output.
             </p>
 
             <div className="setup-grid">
@@ -499,18 +526,26 @@ export default function App() {
             </div>
 
             <div className="demo-panel-footer">
-              <button onClick={() => void handleConnect()} disabled={isConnecting}>
+              <button
+                onClick={() => void handleConnect()}
+                disabled={isConnecting}
+              >
                 {isConnecting ? "Connecting..." : "Enable tracking"}
               </button>
-              <span className={`connection-badge ${isConnected ? "active" : ""}`}>
+              <span
+                className={`connection-badge ${isConnected ? "active" : ""}`}
+              >
                 {isConnected ? "SDK connected" : "SDK idle"}
               </span>
             </div>
 
-            {setupMessage ? <p className="setup-message">{setupMessage}</p> : null}
+            {setupMessage ? (
+              <p className="setup-message">{setupMessage}</p>
+            ) : null}
 
             <p className="setup-note">
-              Verify the actual event flow in your main dashboard stream, not here.
+              Verify the actual event flow in your main dashboard stream, not
+              here.
             </p>
           </div>
         </div>
@@ -574,7 +609,9 @@ function ProductDetailView({
               className="related-card"
               onClick={() => void onViewProduct(item)}
             >
-              <span className={`related-thumb ${item.themeClass}`}>{item.imageLabel}</span>
+              <span className={`related-thumb ${item.themeClass}`}>
+                {item.imageLabel}
+              </span>
               <strong>{item.name}</strong>
               <small>${item.price}</small>
             </button>
@@ -641,7 +678,9 @@ function CartView({
                     <Plus className="size-4" />
                   </button>
                 </div>
-                <strong>${(item.quantity * item.product.price).toFixed(2)}</strong>
+                <strong>
+                  ${(item.quantity * item.product.price).toFixed(2)}
+                </strong>
               </article>
             ))}
           </div>
